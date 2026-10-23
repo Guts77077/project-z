@@ -1,192 +1,99 @@
-use client";
+"use client";
 
-import { useMemo, useState } from "react";
-
-type Product = {
-  name: string;
-  price: string;
-  category: string;
-  status: "Draft" | "Published";
-  description: string;
-  image?: string;
-};
-
-const starterProducts: Product[] = [
-  {
-    name: "Moroccan Artisan Basket",
-    price: "249 DH",
-    category: "Artisan",
-    status: "Published",
-    description: "Handcrafted Moroccan basket with a natural, timeless look."
-  }
-];
+import { useState } from "react";
 
 export default function Home() {
-  const [products, setProducts] = useState<Product[]>(starterProducts);
-  const [showAdd, setShowAdd] = useState(false);
-  const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("Artisan");
-  const [image, setImage] = useState<string | undefined>();
-  const [generated, setGenerated] = useState(false);
-
-  const stats = useMemo(() => ({
-    products: products.length,
-    published: products.filter(p => p.status === "Published").length,
-    orders: 0,
-    revenue: "0 DH"
-  }), [products]);
-
-  function generateAI() {
-    setGenerated(true);
-    if (!name) setName("Moroccan Artisan Product");
-  }
-
-  function addProduct() {
-    if (!name || !price) return;
-    setProducts(prev => [
-      ...prev,
-      {
-        name,
-        price: `${price} DH`,
-        category,
-        status: "Published",
-        description: "AI-ready product listing. Connect the AI engine to generate richer copy, SEO, content and sales messages.",
-        image
-      }
-    ]);
-    setName("");
-    setPrice("");
-    setImage(undefined);
-    setGenerated(false);
-    setShowAdd(false);
-  }
+  const [productName, setProductName] = useState("");
 
   return (
-    <main className="shell">
-      <aside className="sidebar">
-        <div className="brand">
-          <div className="brand-mark">Z</div>
-          <div>
-            <strong>PROJECT Z</strong>
-            <span>AI SELLER</span>
-          </div>
+    <main className="min-h-screen bg-black text-white">
+      <div className="mx-auto max-w-5xl px-6 py-12">
+        <div className="mb-12">
+          <p className="text-sm text-zinc-400">PROJECT Z</p>
+          <h1 className="mt-2 text-4xl font-bold">
+            AI Commerce Agent
+          </h1>
+          <p className="mt-3 max-w-2xl text-zinc-400">
+            Upload a product, add the price, and let AI prepare it for selling.
+          </p>
         </div>
 
-        <nav>
-          <button className="nav active">⌂ <span>Dashboard</span></button>
-          <button className="nav" onClick={() => setShowAdd(true)}>＋ <span>Products</span></button>
-          <button className="nav">▣ <span>Orders</span></button>
-          <button className="nav">◈ <span>Marketing</span></button>
-          <button className="nav">⚙ <span>Settings</span></button>
-        </nav>
+        <section className="rounded-2xl border border-zinc-800 bg-zinc-950 p-6">
+          <h2 className="text-2xl font-semibold">Add Product</h2>
 
-        <div className="sidebar-note">
-          <small>MISSION</small>
-          <p>Photo + price → AI does the selling.</p>
-        </div>
-      </aside>
+          <div className="mt-6 grid gap-6 md:grid-cols-2">
+            <div>
+              <label className="mb-2 block text-sm text-zinc-400">
+                Product photo
+              </label>
 
-      <section className="content">
-        <header className="topbar">
-          <div>
-            <p className="eyebrow">MARRAKECH • MOROCCO</p>
-            <h1>Your AI selling operation.</h1>
-            <p className="muted">Build products, publish them, then let AI handle the work.</p>
-          </div>
-          <button className="primary" onClick={() => setShowAdd(true)}>＋ Add product</button>
-        </header>
-
-        <section className="stats">
-          <div><span>Products</span><strong>{stats.products}</strong></div>
-          <div><span>Published</span><strong>{stats.published}</strong></div>
-          <div><span>Orders</span><strong>{stats.orders}</strong></div>
-          <div><span>Revenue</span><strong>{stats.revenue}</strong></div>
-        </section>
-
-        <section className="hero-card">
-          <div>
-            <p className="eyebrow">THE CORE LOOP</p>
-            <h2>One photo. One price. One click.</h2>
-            <p>Project Z turns a simple product upload into a complete product listing. Next we connect the AI engine, WhatsApp sales flow, COD orders and marketing automation.</p>
-            <button className="primary" onClick={() => setShowAdd(true)}>Create my first product →</button>
-          </div>
-          <div className="flow">
-            <span>📷 Photo</span><b>→</b><span>🤖 AI</span><b>→</b><span>🛍️ Store</span><b>→</b><span>💬 Sales</span>
-          </div>
-        </section>
-
-        <section className="section-head">
-          <div>
-            <p className="eyebrow">CATALOG</p>
-            <h2>Your products</h2>
-          </div>
-          <button className="ghost" onClick={() => setShowAdd(true)}>+ New product</button>
-        </section>
-
-        <div className="products">
-          {products.map((p, i) => (
-            <article className="product-card" key={i}>
-              <div className="product-image">
-                {p.image ? <img src={p.image} alt={p.name} /> : <div className="placeholder">Z</div>}
-              </div>
-              <div className="product-info">
-                <div className="row"><span className="pill">{p.category}</span><span className="status">{p.status}</span></div>
-                <h3>{p.name}</h3>
-                <p>{p.description}</p>
-                <strong className="price">{p.price}</strong>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      {showAdd && (
-        <div className="modal-backdrop" onClick={() => setShowAdd(false)}>
-          <div className="modal" onClick={e => e.stopPropagation()}>
-            <div className="modal-head">
-              <div>
-                <p className="eyebrow">NEW PRODUCT</p>
-                <h2>Let AI prepare it.</h2>
-              </div>
-              <button className="close" onClick={() => setShowAdd(false)}>×</button>
+              <label className="flex min-h-64 cursor-pointer items-center justify-center rounded-xl border border-dashed border-zinc-700 bg-zinc-900 text-zinc-500 hover:border-zinc-500">
+                <input type="file" accept="image/*" className="hidden" />
+                <span>Click to upload product photo</span>
+              </label>
             </div>
 
-            <label>Product photo</label>
-            <div className="upload">
-              {image ? <img src={image} alt="Preview" /> : <><span>📷</span><b>Upload product photo</b><small>JPG, PNG or WEBP</small></>}
-              <input type="file" accept="image/*" onChange={e => {
-                const file = e.target.files?.[0];
-                if (file) setImage(URL.createObjectURL(file));
-              }} />
-            </div>
-
-            <label>Product name <small>optional</small></label>
-            <input value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Handmade leather babouche" />
-
-            <div className="two">
+            <div className="space-y-5">
               <div>
-                <label>Price (DH)</label>
-                <input value={price} onChange={e => setPrice(e.target.value)} placeholder="249" inputMode="decimal" />
+                <label className="mb-2 block text-sm text-zinc-400">
+                  Price (DH)
+                </label>
+                <input
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                  type="number"
+                  placeholder="Example: 350"
+                  className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 outline-none focus:border-white"
+                />
               </div>
+
               <div>
-                <label>Category</label>
-                <select value={category} onChange={e => setCategory(e.target.value)}>
+                <label className="mb-2 block text-sm text-zinc-400">
+                  Category
+                </label>
+                <select
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 outline-none"
+                >
                   <option>Artisan</option>
                   <option>Vintage</option>
                   <option>Fashion</option>
-                  <option>Home</option>
-                  <option>Gifts</option>
+                  <option>Home Decor</option>
+                  <option>Jewelry</option>
                 </select>
               </div>
-            </div>
 
-            <button className="ai-button" onClick={generateAI}>✦ Generate with AI {generated && "✓"}</button>
-            {generated && <div className="ai-preview">AI preview ready — next step is connecting the real model to generate the title, description, benefits, SEO, FAQ and WhatsApp sales script automatically.</div>}
-            <button className="primary full" onClick={addProduct}>Publish product →</button>
+              <button
+                onClick={() =>
+                  setProductName(
+                    "AI will generate your product information here"
+                  )
+                }
+                className="w-full rounded-xl bg-white px-5 py-3 font-semibold text-black hover:bg-zinc-200"
+              >
+                ✨ Generate Product with AI
+              </button>
+            </div>
           </div>
-        </div>
-      )}
+
+          {productName && (
+            <div className="mt-8 rounded-xl border border-zinc-800 bg-zinc-900 p-5">
+              <p className="text-sm text-zinc-500">AI Preview</p>
+              <h3 className="mt-2 text-xl font-semibold">{productName}</h3>
+
+              <div className="mt-4 grid gap-3 text-sm text-zinc-400">
+                <p>Price: {price || "—"} DH</p>
+                <p>Category: {category}</p>
+                <p>Product description: Ready for AI generation.</p>
+                <p>Sales message: Ready for AI generation.</p>
+              </div>
+            </div>
+          )}
+        </section>
+      </div>
     </main>
   );
 }
